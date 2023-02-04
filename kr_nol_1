@@ -1,0 +1,84 @@
+from tkinter import *
+import random, time
+
+def comp_turn(t, n):
+    global game
+    global game_left
+    if len(game_left) == 0:
+        if (game[0] == 'X' and game[4] == 'X' and game[8] == 'X') or (game[1] == 'X' and game[4] == 'X' and game[7] == 'X') or (game[2] == 'X' and game[4] == 'X' and game[6] == 'X') or (game[3] == 'X' and game[4] == 'X' and game[5] == 'X') or (game[0] == 'X' and game[1] == 'X' and game[2] == 'X') or (game[6] == 'X' and game[7] == 'X' and game[8] == 'X') or (game[0] == 'X' and game[3] == 'X' and game[6] == 'X') or (game[2] == 'X' and game[4] == 'X' and game[8] == 'X'):
+            label['text'] = 'Вы выиграли'
+        elif (game[0] == '0' and game[4] == '0' and game[8] == '0') or (
+                game[1] == '0' and game[4] == '0' and game[7] == '0') or (
+                game[2] == '0' and game[4] == '0' and game[6] == '0') or (
+                game[3] == '0' and game[4] == '0' and game[5] == '0') or (
+                game[0] == '0' and game[1] == '0' and game[2] == '0') or (
+                game[6] == '0' and game[7] == '0' and game[8] == '0') or (
+                game[0] == '0' and game[3] == '0' and game[6] == '0') or (
+                game[2] == '0' and game[4] == '0' and game[8] == '0'):
+            label['text'] = 'Вы проиграли'
+        else:
+            label['text'] = 'Игра закончена'
+    if t == 0 and n == 4:
+        x = random.choice(game_left)
+    elif t == 0 and n != 4:
+        x = 4
+    elif t > 0:
+        if game[0] == 'X' and game[4] == 'X':
+            x = 8
+        elif game[1] == 'X' and game[4] == 'X':
+            x = 7
+        elif game[2] == 'X' and game[4] == 'X':
+            x = 6
+        elif game[3] == 'X' and game[4] == 'X':
+            x = 5
+        elif game[5] == 'X' and game[4] == 'X':
+            x = 3
+        elif game[6] == 'X' and game[4] == 'X':
+            x = 2
+        elif game[7] == 'X' and game[4] == 'X':
+            x = 1
+        elif game[8] == 'X' and game[4] == 'X':
+            x = 0
+        if not(x in game_left):
+            try:
+                x = random.choice(game_left)
+            except IndexError:
+                label['text'] = 'Игра закончена'
+    game[x] = '0'
+    try:
+        game_left.remove(x)
+    except ValueError:
+        label['text'] = 'Игра закончена'
+        buttons[x].config(bg="white", text='0', state="disabled")
+    return t + 1
+
+def push(b):
+    global game
+    global turn
+    global game_left
+    game[b] = 'X'
+    buttons[b].config(bg="white", text='X', state="disabled")
+    game_left.remove(b)
+    turn = comp_turn(turn, b)
+
+game = [None] * 9
+game_left = [i for i in range(9)]
+turn = 0
+
+#нарисуем визуальную часть
+root = Tk()
+label = Label(width=20, text="Игра крестики-нолики", font=('Arial', 20, 'bold'))
+buttons = [Button(width=5, height=2, font=('Arial', 28, 'bold'), text=None, bg="green", command=lambda x=i: push(x)) for i in range(9)]
+
+
+label.grid(row=0, column=0, columnspan=3)
+row = 1
+column = 0
+for i in range(9):
+    buttons[i].grid(row=row,column=column)
+    column += 1
+    if column == 3:
+        row += 1
+        column = 0
+
+root.mainloop()
