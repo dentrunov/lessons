@@ -1,0 +1,25 @@
+import string
+
+def ceasar(x, s):
+    start_alphabet = string.ascii_lowercase
+    #start_alphabet = 'абвгдежзийклмнопрстуфхцчшщъыьэюя'
+    res = ''
+    lenght = len(start_alphabet)
+    for sym in x:
+        if sym.lower() in start_alphabet:
+            n = start_alphabet.index(sym.lower())
+            if n + s >= lenght:
+                new_sym = (n + s) - lenght
+            else:
+                new_sym = n + s
+            if sym.isupper():
+                res += start_alphabet[new_sym].upper()
+            else:
+                res += start_alphabet[new_sym]
+        else:
+            res += sym
+
+    return res
+
+for i in range(1,26):
+    print(ceasar( "Hawnj pk swhg xabkna ukq nqj." , -i))
